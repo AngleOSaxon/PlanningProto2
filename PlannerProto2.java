@@ -25,9 +25,9 @@ public class PlannerProto2 {
       //println("Hello world");
       
       PlannerProto2 pp2 = new PlannerProto2("pp2data.txt");
-/*       pp2.simplePartPrint(pp2.lookupPart("BatBox", pp2.getItems()));
+/*       pp2.simplePartPrint(pp2.lookupPart("BatBox", pp2.getItems()));*/
       pp2.simpleCalc(pp2.lookupPart("BatBox", pp2.getItems()),4);
-      pp2.simpleCalc(pp2.lookupPart("Stick", pp2.getItems()),3);
+      /*pp2.simpleCalc(pp2.lookupPart("Stick", pp2.getItems()),3);
       pp2.simpleCalc(pp2.lookupPart("TinCable", pp2.getItems()),5); */
       pp2.simpleCalc(pp2.lookupPart("Plank", pp2.getItems()),1);
       pp2.simpleCalc(pp2.lookupPart("Plank", pp2.getItems()),2);
@@ -91,27 +91,27 @@ public class PlannerProto2 {
       }
    }
 //===SIMPLE CALC===
-   private void simpleCalc(Part p, int n) {
+    private void simpleCalc(Part p, int n) {
+       simpleCalc(p, n, "");
+    }
+
+   private void simpleCalc(Part p, int n, String indent) {
       int actualN = 0;
-      
-      int min = p.getMin();
-      if(n > min) {
-         actualN = (int) Math.ceil((double)n / (double)(min+1));
-         println(actualN+"");
-      } else {
-         actualN = 0;
-      }
-      println(p.getName()+" ("+n+"):");
+
+      print(indent + p.getName()+" ("+n+")");
       if(p.getSubParts() != null) {
-         
+          println(":");
          Subpart[] subParts = p.getSubParts();
          
          for (Subpart subPart : subParts) {
+             int numRequired = (int)Math.ceil(n * subPart.getNumOfPart());
+             simpleCalc(subPart.getPart(), numRequired, indent + " ");
             //double sn = numSubParts[i] * n
-            println(" " + subPart.getPart().getName() + " x " + (min * subPart.getNumOfPart() + actualN)); //<<<fix this
+            // println(" " + subPart.getPart().getName() + " x " + numRequired); //<<<fix this
          }
       } else {
-         println(" null");
+          println("");
+         // println(" null");
       }
    }
    
@@ -159,7 +159,7 @@ public class PlannerProto2 {
    }
    
    public static void print(String s) {
-      System.out.println(s);
+      System.out.print(s);
    }
    
 //===GETTERS===
